@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Chatbot</title>
+    <style>
+        * {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+body {
+  background: #4b5c66;
+}
+.container {
+  height: 420px;
+  width: 350px;
+  background: #fff;
+  position: fixed;
+  bottom: 50px;
+  right: 10px;
+  box-shadow: 0px 0px 15px 0px black;
+}
+.chat-header {
+  height: 60px;
+  display: flex;
+  align-items: center;
+  padding: 0px 30px;
+  background-color: #0652c0;
+  color: #fff;
+  font-size: 1.5rem;
+}
+
+.chat-header .logo {
+  height: 35px;
+  width: 35px;
+  box-shadow: 0px 0px 10px 0px black;
+}
+.chat-header .title {
+  padding-left: 10px;
+}
+.chat-body {
+  height: 300px;
+  display: flex;
+  flex-direction: column;
+  padding: 8px 10px;
+  align-items: flex-end;
+  overflow-y: auto;
+}
+.chat-input {
+  height: 60px;
+  display: flex;
+  align-items: center;
+  border-top: 1px solid #ccc;
+}
+.input-sec {
+  flex: 9;
+}
+.send {
+  flex: 1;
+  padding-right: 4px;
+}
+#txtInput {
+  line-height: 30px;
+  padding: 8px 10px;
+  border: none;
+  outline: none;
+  caret-color: black;
+  font-size: 1rem;
+  width: 100%;
+}
+
+.chatbot-message,
+.user-message {
+  padding: 8px;
+  background: #ccc;
+  margin: 5px;
+  width: max-content;
+  border-radius: 10px 3px 10px 10px;
+}
+.chatbot-message {
+  background: #0652c0;
+  color: #fff;
+  align-self: flex-start;
+  border-radius: 10px 10px 3px 10px;
+}
+#sendinput{
+	border: none;
+	background-color: white;
+	margin: 20px;
+}
+    </style>
+  </head>
+  <body>
+    
+    <div class="container">
+      
+      <div class="chat-header">
+        <div class="title">Let's Chat</div>
+      </div>
+      
+      <div class="chat-body"></div>
+      
+      <div class="chat-input">
+        
+        <div class="input-sec">
+          <input type="text" id="txtInput" placeholder="Type here">
+        </div>
+        
+        <div class="send">
+          <input type="button" name="sendinput" id="sendinput" value="Send">
+        </div>
+      
+        </div>
+    </div>
+
+<script>
+const chatBody = document.querySelector(".chat-body");
+const txtInput = document.querySelector("#txtInput");
+const send = document.querySelector(".send");
+
+send.addEventListener("click", () => renderUserMessage());
+
+txtInput.addEventListener("keyup", (event) => {
+  if (event.keyCode === 13) {
+    renderUserMessage();
+  }
+});
+
+const renderUserMessage = () => {
+  const userInput = txtInput.value;
+  renderMessageEle(userInput, "user");
+  txtInput.value = "";
+  setTimeout(() => {
+    renderChatbotResponse(userInput);
+    userInput = userInput.toLowerCase();
+    setScrollPosition();
+  }, 600);
+};
+
+const renderChatbotResponse = (userInput) => {
+  const res = getChatbotResponse(userInput);
+  renderMessageEle(res);
+};
+
+const renderMessageEle = (txt, type) => {
+  let className = "user-message";
+  if (type !== "user") {
+    className = "chatbot-message";
+  }
+  const messageEle = document.createElement("div");
+  const txtNode = document.createTextNode(txt);
+  messageEle.classList.add(className);
+  messageEle.append(txtNode);
+  chatBody.append(messageEle);
+};
+
+const getChatbotResponse = (userInput) => {
+  return responjs[userInput] == undefined
+    ? "Sorry, I did not Understand!"
+    : responjs[userInput];
+};
+
+const setScrollPosition = () => {
+  if (chatBody.scrollHeight > 0) {
+    chatBody.scrollTop = chatBody.scrollHeight;
+  }
+};
+
+const responjs = {
+  "hi": "Hey ! How are you doing ?",
+  "hey": "Hey! What's Up",
+  "iamfine": "Good!",
+  "bye": "Talk to you later!",
+  "about": "devolping the website.",
+  "today": new Date().toDateString(),
+};
+</script>
+
+  </body>
+</html>
